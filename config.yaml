@@ -12,9 +12,17 @@ dotfiles:
   f_init.vim:
     src: config/nvim/init.vim
     dst: ~/.config/nvim/init.vim
+  d_oh-my-zsh:
+    src: oh-my-zsh
+    dst: ~/.oh-my-zsh
+  f_aliases:
+    src: aliases
+    dst: ~/.aliases
 profiles:
   Jimmys-MacBook-Air.local:
     dotfiles:
     - f_zshrc
     - f_vimrc
     - f_init.vim
+    - d_oh-my-zsh
+    - f_aliases

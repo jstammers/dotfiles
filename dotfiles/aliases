@@ -1,0 +1,47 @@
+function peak-prod () {
+aws-google-auth -p peak-login $1;
+grep "export AWS_PROFILE" ~/.zshrc &> /dev/null || echo "\nexport AWS_PROFILE=peak-prod" >> ~/.zshrc && source ~/.zshrc  && sed -i '' 's/^export AWS_PROFILE=.*/export AWS_PROFILE=peak-prod/' ~/.zshrc
+}
+
+function peak-docker () {
+export _DOCKER_REPO="$(aws ecr get-authorization-token --output text  --query 'authorizationData[].proxyEndpoint')"
+aws ecr get-login --no-include-email --region eu-west-1 | awk '{print $6}' | docker login -u AWS --password-stdin $_DOCKER_REPO
+}
+
+function epub-convert () {
+local epub="$1"
+local zipfile="$(basename "$epub" .epub).zip"
+local dir="$(basename "$epub" .epub)"
+for i in "$@"
+do
+case $i in
+    -q=*|--quality=*)
+    QUALITY="${i#*=}"
+    shift # past argument=value
+    ;;
+    -s=*|--searchpath=*)
+    SEARCHPATH="${i#*=}"
+    shift # past argument=value
+    ;;
+    -l=*|--lib=*)
+    LIBPATH="${i#*=}"
+    shift # past argument=value
+    ;;
+    --default)
+    DEFAULT=YES
+    shift # past argument with no value
+    ;;
+    *)
+          # unknown option
+    ;;
+esac
+done
+echo "copying to zip"
+cp $epub $zipfile
+mkdir $dir
+unzip $zipfile -d $dir
+cd $dir
+for file in **/*.jpg; do convert -strip -interlace Plane -gaussian-blur 0.05 -quality ${QUALITY}% $file $file; done
+cd ..
+zip -r $dir_$QUALITY.epub $dir
+}
