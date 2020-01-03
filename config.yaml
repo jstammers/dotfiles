@@ -1,0 +1,20 @@
+config:
+  backup: true
+  create: true
+  dotpath: dotfiles
+dotfiles:
+  f_zshrc:
+    src: zshrc
+    dst: ~/.zshrc
+  f_vimrc:
+    src: vimrc
+    dst: ~/.vimrc
+  f_init.vim:
+    src: config/nvim/init.vim
+    dst: ~/.config/nvim/init.vim
+profiles:
+  Jimmys-MacBook-Air.local:
+    dotfiles:
+    - f_zshrc
+    - f_vimrc
+    - f_init.vim

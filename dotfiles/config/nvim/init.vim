@@ -1,0 +1,359 @@
+
+" An example for a vimrc file.
+"
+" Maintainer:	Bram Moolenaar <Bram@vim.org>
+" Last change:	2006 Aug 12
+"
+" To use it, copy it to
+"     for Unix and OS/2:  ~/.vimrc
+"	      for Amiga:  s:.vimrc
+"  for MS-DOS and Win32:  $VIM\_vimrc
+"	    for OpenVMS:  sys$login:.vimrc
+
+" When started as "evim", evim.vim will already have done these settings.
+filetype plugin indent on
+set termguicolors
+set autoindent tabstop=2 shiftwidth=2 expandtab
+set encoding=utf-8
+" Turn on numbers and set their color
+
+set number
+set incsearch
+set hlsearch
+call plug#begin('~/.vim/plugged')
+Plug 'crusoexia/vim-monokai'
+"Plug 'ErichDonGubler/vim-sublime-monokai'
+if has('nvim')
+  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/deoplete.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+"Plug 'vim-pandoc/vim-pandoc'
+"Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'vimwiki/vimwiki', { 'branch': 'dev' }
+Plug 'mattn/calendar-vim'
+"Plug 'zchee/deoplete-clang'
+"Plug 'zchee/deoplete-go', { 'do': 'make', 'for':'go'}
+"Plug 'Shougo/neoinclude.vim'
+"Plug 'python-mode/python-mode', { 'branch': 'develop' }
+"Plug 'wmvanvliet/jupyter-vim', {'for':['python']}
+"Plug 'ivanov/vim-ipython', {'for':['python']}
+"Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+"Plug 'mdempsky/gocode', { 'rtp': 'nvim', 'do': '~/.config/nvim/plugged/gocode/nvim/symlink.sh' }
+"Plug 'zchee/deoplete-jedi', {'for':['python']}
+"Plug 'lervag/vimtex', {'for':['tex']}
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-dispatch'
+"Plug 'jalvesaq/vimcmdline'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+"Plug 'OmniSharp/omnisharp-vim'
+"Plug 'w0rp/ale', {'for':['python','go','cpp']}
+"Plug 'tracyone/pyclewn_linux' ,{ 'branch': 'pyclewn-1.11' }
+Plug 'Shougo/vimproc.vim', {'do' : 'make'}
+Plug 'SirVer/ultisnips'
+"Plug 'idanarye/vim-vebugger'
+
+"Plug 'LucHermitte/lh-vim-lib', {'for':['c','cpp']}
+"Plug 'LucHermitte/lh-style', {'for':['c','cpp']}
+""Plug 'LucHermitte/lh-tags', {'for':['c','cpp']}
+"Plug 'LucHermitte/lh-dev', {'for':['c','cpp']}
+"Plug 'LucHermitte/lh-brackets', {'for':['c','cpp']}
+"Plug 'LucHermitte/searchInRuntime', {'for':['c','cpp']}
+"Plug 'LucHermitte/mu-template', {'for':['c','cpp']}
+"Plug 'tomtom/stakeholders_vim', {'for':['c','cpp']}
+"Plug 'LucHermitte/alternate-lite', {'for':['c','cpp']}
+"Plug 'LucHermitte/lh-cpp', {'for':['c','cpp']}
+"Plug 'davidhalter/jedi-vim', {'for' :'python'}
+"Plug 'hdima/python-syntax', {'for': 'python'}
+"Plug 'cjrh/vim-conda'
+" Snippets are separated from the engine. Add this if you want them:
+Plug 'honza/vim-snippets'
+" Plug 'majutsushi/tagbar'
+let python_highlight_all = 1
+set runtimepath^=~/.vim/bundle/ctrlp.vim
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<c-tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-j>"
+let g:UltiSnipsJumpBackwardTrigger="<c-k>"
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+"let g:deoplete#enable_at_startup = 1
+"let g:jedi#completions_enabled = 1
+let g:jedi#show_call_signatures = 2
+call plug#end()
+execute pathogen#infect()
+
+if v:progname =~? "evim"
+  finish
+endif
+let g:sublimemonokai_term_italic = 1
+let g:airline_powerline_fonts=1
+let g:airline#extensions#tabline#enabled = 1
+" Use Vim settings, rather then Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+set t_Co=256
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
+set backup
+set backupdir=~/tmp
+set history=50		" keep 50 lines of command line history
+set ruler		" show the cursor position all the time
+set showcmd		" display incomplete commands
+let g:powerline_pycmd = 'py3'
+set incsearch		" do incremental searching
+
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+" In an xterm the mouse should work quite well, thus enable it.
+set mouse=a
+if !has('nvim')
+  set ttymouse=xterm2     " necessary for gnu screen & mouse
+endif
+
+" This is an alternative that also works in block mode, but the deleted
+" text is lost and it only works for putting the current register.
+"vnoremap p "_dp
+
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+endif
+" Set the default colorscheme
+highlight LineNr ctermfg=0
+
+syntax enable
+set background=dark
+"colorscheme solarized
+colorscheme monokai
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+  autocmd BufNewFile,BufRead *.tex set tw=70 fo=cqt wm=0
+augroup vimrcEx
+  autocmd!
+  autocmd FileType text setlocal textwidth=78
+  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"" | endif
+  "autocmd User fugitive if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' | nnoremap <buffer> .. :edit %:h<CR> | endif
+  autocmd BufReadPost fugitive://* set bufhidden=delete
+  autocmd InsertLeave if pumvisible() == 0 | pclose | endif
+  autocmd FileType vimwiki map <Leader>d :VimwikiMakeDiaryNote
+autocmd InsertLeave * silent! pclose!
+  autocmd FileType vimwiki map <Leader>c :call ToggleCalendar()
+augroup END
+endif
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis | wincmd p | diffthis
+
+let g:python3_host_prog = '/usr/local/bin/python3'
+let g:python_host_prog = '/usr/bin/python'
+filetype plugin on
+
+" OPTIONAL: This enables automatic indentation as you type.
+filetype indent on
+
+if exists('g:deoplete')
+  let g:deoplete#omni#input_patterns.tex = g:vimtex#re#deoplete
+  let g:deoplete#enable_at_startup = 1
+    if !exists('g:deoplete#sources')
+      let g:deoplete#sources = {}
+    endif
+  let g:deoplete#sources.vimwiki = ['omni']
+  if !exists('g:deoplete#omni#input_patterns')
+     let g:deoplete#omni#input_patterns = {}
+   endif
+endif
+if exists('g:vimtex')
+  let g:vimtex_complete_img_use_tail = 1
+  let g:vimtex_fold_enabled = 1
+  let g:vimtex_view_general_viewer = 'okular'
+  let g:vimtex_view_general_options = '--unique file:@pdf\#src:@line@tex'
+  let g:vimtex_view_general_options_latexmk = '--unique'
+  let g:vimtex_quickfix_method = 'pplatex'
+endif
+" OPTIONAL: Starting with Vim 7, the filetype of empty .tex files defaults to
+" 'plaintex' instead of 'tex', which results in vim-latex not being loaded.
+" The following changes the default filetype back to 'tex':
+let g:tex_flavor='latex'
+let g:vimwiki_list = [{'path': '~/Dropbox/Notes/Peak/', 'syntax':'markdown', 'ext': '.md', 
+      \'custom_wiki2html':'vimwiki_markdown', 
+      \'template_path':'~/Dropbox/Notes/Peak/templates/',
+      \'template_default':'default','path_html':'~/Dropbox/Notes/Peak/site_html/'},
+      \{'path': '~/Dropbox/Notes/Public/', 
+      \'syntax':'markdown', 'ext': '.md', 
+      \'custom_wiki2html':'vimwiki_markdown', 
+      \'template_path':'~/Dropbox/Notes/Public/templates/',
+      \'template_default':'default','path_html':'~/Dropbox/Notes/Public/site_html/'},
+      \{'path': '~/Dropbox/Notes/Personal/', 
+      \'syntax':'markdown', 
+      \'ext': '.md', 
+      \'custom_wiki2html':'vimwiki_markdown', 
+      \'template_path':'~/Dropbox/Notes/Personal/templates/',
+      \'template_default':'default','path_html':'~/Dropbox/Notes/Personal/site_html/'}]
+au BufRead, BufNewFile *.wiki set filetype=vimwiki
+au BufRead, BufNewFile *.md set filetype=vimwiki
+function! ToggleCalendar()
+  execute ":Calendar"
+  if exists("g:calendar_open")
+    if g:calendar_open == 1
+      execute "q"
+      unlet g:calendar_open
+    else
+      g:calendar_open = 1
+    end
+  else
+    let g:calendar_open = 1
+  end
+endfunction
+let g:pymode_python = 'python3'
+let g:pymode_lint = 0
+let g:pymode_rope = 0
+"nnoremap <Leader>f :call SyncTexForward()<CR>
+let g:UltiSnipsSnippetDirectories = ['~/.vim/UltiSnips','UltiSnips']
+let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+
+"" go color scheme
+"let g:go_highlight_format_strings = 1
+"let g:go_highlight_function_arguments = 1
+"let g:go_highlight_function_calls = 1
+"let g:go_highlight_functions = 1
+"let g:go_highlight_operators = 1
+"let g:go_highlight_types = 1
+"let g:go_highlight_extra_types = 1
+"let g:go_highlight_fields = 1
+"let g:go_highlight_generate_tags = 1
+"let g:go_highlight_variable_assignments = 1
+"let g:go_highlight_variable_declarations = 1
+"" Tell ALE to use OmniSharp for linting C# files, and no other linters.
+"let g:ale_linters = { 'cs': ['OmniSharp'], 'python':['flake8','pylint'] }
+"let g:ale_fixers = {'python':['autopep8']}
+"nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+"nmap <silent> <C-j> <Plug>(ale_next_wrap)
+" Enable snippet completion
+" let g:OmniSharp_want_snippet=1
+" Turnon the tag list toggle
+nmap <Leader>@ :TagbarToggle<CR>
+nmap ` :NERDTreeToggle<CR>
+
+map <S-Enter> O<Esc>
+nmap <CR> o<Esc>
+
+" Remap Alt-hkjl to navigate between windows in both terminal
+" and normal buffers
+tnoremap <A-h> <C-\><C-n><C-w>h
+tnoremap <A-j> <C-\><C-n><C-w>j
+tnoremap <A-k> <C-\><C-n><C-w>k
+tnoremap <A-l> <C-\><C-n><C-w>l
+nnoremap <A-h> <C-w>h
+nnoremap <A-j> <C-w>j
+nnoremap <A-k> <C-w>k
+nnoremap <A-l> <C-w>l
+
+" read all file in hexa
+nmap <leader>he :%!xxd<cr>
+" return to binary
+nmap <leader>He :%!xxd -r<cr>
+" lint checker
+let g:ale_open_list = 'on_save'
+nmap <silent> <Leader>k <Plug>(ale_previous_wrap)
+nmap <silent> <Leader>j <Plug>(ale_next_wrap)
+let g:ale_fix_on_save = 1
+let g:lightline = {}
+let g:lightline.component_expand = {
+      \  'linter_warnings': 'lightline#ale#warnings',
+      \  'linter_errors': 'lightline#ale#errors',
+      \  'linter_ok': 'lightline#ale#ok',
+      \ }
+let g:lightline.component_type = {
+      \     'linter_warnings': 'warning',
+      \     'linter_errors': 'error',
+      \     'linter_ok': 'left',
+      \ }
+let g:lightline.active = {
+      \     'left': [ [ 'mode', 'paste' ],
+      \               [ 'linter_errors', 'linter_warnings', 'linter_ok' ],
+      \               [ 'readonly', 'filename', 'modified' ]
+      \             ],
+      \     'right': [ [ 'linter_errors', 'linter_warnings', 'linter_ok' ],
+      \                [ 'lineinfo', 'percent' ],
+      \                [ 'fileformat', 'fileencoding', 'filetype' ]
+      \              ] }
+
+" Deoplete
+let g:deoplete#enable_at_startup = 1
+if !exists('g:deoplete#omni#input_patterns')
+  let g:deoplete#omni#input_patterns = {}
+endif
+let g:deoplete#sources#jedi#show_docstring = 1
+" let g:deoplete#disable_auto_complete = 1
+"let g:python_host_prog = '/usr/bin/python'
+"let g:python3_host_prog = '/usr/bin/python3'
+
+" " python venv
+" let g:virtualenv_auto_activate = 1
+
+" Jedi
+let g:jedi#auto_vim_configuration = 0
+" current default is 1.
+let g:jedi#use_tabs_not_buffers = 0
+let g:jedi#rename_command = '<Leader>r'
+let g:jedi#usages_command = '<Leader>u'
+let g:jedi#completions_enabled = 0
+let g:jedi#smart_auto_mappings = 1
+
+let g:jedi#goto_command = "gd"
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = "<leader>d"
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader>r"
+
+" Unite/ref and pydoc are more useful.
+let g:jedi#documentation_command = '<Leader>K'
+let g:jedi#auto_close_doc = 1
+
+" go
+" Show a list of interfaces which is implemented by the type under your cursor
+au FileType go nmap <Leader>s <Plug>(go-implements)
+" Show type info for the word under your cursor
+au FileType go nmap <Leader>i <Plug>(go-info)
+" Open the relevant Godoc for the word under the cursor
+au FileType go nmap <Leader>gd <Plug>(go-doc)
+au FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+" Or open the Godoc in browser
+au FileType go nmap <Leader>gb <Plug>(go-doc-browser)
+" run, build, test and coverage
+au FileType go nmap <leader>r <Plug>(go-run)
+au FileType go nmap <leader>b <Plug>(go-build)
+au FileType go nmap <leader>t <Plug>(go-test)
+au FileType go nmap <leader>c <Plug>(go-coverage)
+" go to definition
+au FileType go nmap <Leader>ds <Plug>(go-def-split)
+au FileType go nmap <Leader>dv <Plug>(go-def-vertical)
+au FileType go nmap <Leader>dt <Plug>(go-def-tab)
+" Rename the identifier under the cursor to a new name
+
+map <C-n> :cnext<CR>
+map <C-m> :cprevious<CR>
+nnoremap <silent> <Leader>gs :Gstatus<CR>
+nnoremap <silent> <Leader>gd :Gdiff<CR>
+nnoremap <silent> <Leader>gc :Gcommit<CR>
+nnoremap <silent> <Leader>gb :Gblame<CR>
+nnoremap <silent> <Leader>gl :Glog<CR>
+nnoremap <silent> <Leader>gp :Git push<CR>
+nnoremap <silent> <Leader>gw :Gwrite<CR>
+nnoremap <silent> <Leader>gr :Gremove<CR>
+let g:vebugger_leader='<Leader>d'
+
